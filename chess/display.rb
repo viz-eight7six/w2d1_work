@@ -13,12 +13,18 @@ class Display
 
   def render
     while true
+      possible_king_pos = @cursor.board.in_check("blue")
+      other_king_pos = @cursor.board.in_check("red")
       @cursor.board.grid.each_with_index do |row, idx|
         row.each_with_index do |el, idx2|
-          if [idx, idx2] == @cursor.cursor_pos
-            print " pos ".blue
+          if possible_king_pos == [idx, idx2] || other_king_pos == [idx, idx2]
+            print " #{el.symbol} ".center(5).magenta
+          elsif [idx, idx2] == @cursor.selected
+            print " #{el.symbol} ".center(5).yellow
+          elsif [idx, idx2] == @cursor.cursor_pos
+            print " #{el.symbol} ".center(5).green
           else
-            print " pos ".red
+            print " #{el.symbol} ".center(5).blue
           end
         end
         print "\n"

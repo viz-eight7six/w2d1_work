@@ -34,11 +34,12 @@ MOVES = {
 
 class Cursor
 
-  attr_reader :cursor_pos, :board
+  attr_reader :cursor_pos, :board, :selected
 
   def initialize(cursor_pos, board)
     @cursor_pos = cursor_pos
     @board = board
+    @selected = nil
   end
 
   def get_input
@@ -83,10 +84,11 @@ class Cursor
       update_pos(MOVES[key])
     when :ctrl_c
       Process.exit(0)
-    when :space, :return
-      @cursor_pos
-
-      # , :tab, :return, :newline, :escape, :backspace, :delete
+    when :space
+      toggle_selected
+    when :return
+      did_it_work = @board.move_piece(@selected, @cursor_pos)
+      did_it_work.nil? ? nil : @selected = nil
     else
     end
   end
@@ -105,6 +107,7 @@ class Cursor
   end
 
   def toggle_selected
+    @selected = @cursor_pos
     # when we select a piece, make that piece a third color (yellow?)
   end
 end
